@@ -12,8 +12,6 @@ $(function() {
   var i = 0;
   var index = 1;
 
-  alert("HELLO");
-
   var myInterval = setInterval(loadImage, 1);
 
   function loadImage() {
