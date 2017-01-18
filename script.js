@@ -9,34 +9,77 @@ $(function() {
 
   var img;
   var imgArray = new Array();
+  var imgTypeArray = [".jpg", ".JPG", ".png", ".jpeg"];
+  var missingCount = 0;
   var i = 0;
-  var index = 1;
-
-  var myInterval = setInterval(loadImage, 1);
+  var bool = false;
 
   function loadImage() {
-    if (bFinishCheck) {
-      clearInterval(myInterval);
-      buildImages();
-      return;
+    while(true) {
+      bool = false;
+      for(x = 0; x < imgTypeArray.length; x++) {
+        var imageUrl = 'photos/main/' + i + "" + imgTypeArray[x];
+        console.log('photos/main/' + i + "" + imgTypeArray[x]);
+        // imageExists(imageUrl, function(exists) {
+        //   if(exists == true) {
+        //     img = new Image();
+        //     img.src = imageUrl;
+        //     imgArray.push(img);
+        //     bool = true;
+        //     console.log(imgTypeArray[x]);
+        //   } else {
+        //     missingCount++;
+        //   }
+        // });
+        $.ajax({
+            url: imageUrl,
+            type:'HEAD',
+            success: function() {
+              img = new Image();
+              img.src = imageUrl;
+              imgArray.push(img);
+              bool = true;
+            }
+        });
+      }
+      if(bool == false) {
+        return;
+      }
+      i++;
     }
-    if (bCheckEnabled) {
-      bCheckEnabled = false;
-      img = new Image();
-      img.onload = fExists;
-      img.onerror = fDoesntExist;
-      img.src = 'photos/main/' + i + '.jpg';
-    }
   }
-  function fExists() {
-    imgArray.push(img);
-    i++;
-    bCheckEnabled = true;
-  }
-  function fDoesntExist() {
-    bFinishCheck = true;
-    console.log(imgArray);
-  }
+
+  loadImage();
+
+  // function loadImage(i) {
+  //   if (bFinishCheck) {
+  //     buildImages();
+  //     return;
+  //   }
+  //   if (bCheckEnabled) {
+  //     missingCount = 0;
+  //     $.each(imgTypeArray, function(index, type) {
+  //       img = new Image();
+  //       img.onload = fExists();
+  //       img.onerror = fDoesntExist();
+  //       console.log("searching "+i+type);
+  //       img.src = 'photos/main/' + i + "" + type;
+  //     });
+  //     loadImage(i+1);
+  //   }
+  // }
+  // function fExists() {
+  //   imgArray.push(img);
+  //   bFinishCheck = true;
+  // }
+  // function fDoesntExist() {
+  //   missingCount++;
+  //   console.log(missingCount);
+  //   if(missingCount >= imgTypeArray.length) {
+  //     bFinishCheck = true;
+  //     console.log(imgArray);
+  //   }
+  // }
 
   function buildImages() {
     $(".s9imageItem").remove();
@@ -45,11 +88,6 @@ $(function() {
         image_code_prefix+image.src+image_code_postfix
       );
     });
-    updateCounter();
-  }
-
-  function updateCounter() {
-    $('.s9counter').html(index+"/"+i);
   }
 
   $(".s9buttonNext").click(function() {
@@ -65,16 +103,12 @@ $(function() {
   function nextImage() {
     var image_code = $(".s9imageItem:last-child")[0].outerHTML;
     $(".s9itemsContainer").prepend(image_code);
-    index = (index+1)%(i+1) == 0 ? 1 : (index+1)%(i+1);
-    updateCounter();
     $(".s9imageItem:last-child").remove();
   }
 
   function prevImage() {
     var image_code = $(".s9imageItem:first-child")[0].outerHTML;
     $(".s9itemsContainer").append(image_code);
-    index = (index-1)%(i+1) == 0 ? i : (index-1)%(i+1);
-    updateCounter();
     $(".s9imageItem:first-child").remove();
   }
 
