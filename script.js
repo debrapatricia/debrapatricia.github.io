@@ -14,42 +14,32 @@ $(function() {
   var i = 0;
   var bool = false;
 
-  function loadImage() {
-    while(true) {
-      bool = false;
-      for(x = 0; x < imgTypeArray.length; x++) {
-        var imageUrl = 'photos/main/' + i + "" + imgTypeArray[x];
-        console.log('photos/main/' + i + "" + imgTypeArray[x]);
-        // imageExists(imageUrl, function(exists) {
-        //   if(exists == true) {
-        //     img = new Image();
-        //     img.src = imageUrl;
-        //     imgArray.push(img);
-        //     bool = true;
-        //     console.log(imgTypeArray[x]);
-        //   } else {
-        //     missingCount++;
-        //   }
-        // });
-        $.ajax({
-            url: imageUrl,
-            type:'HEAD',
-            success: function() {
-              img = new Image();
-              img.src = imageUrl;
-              imgArray.push(img);
-              bool = true;
-            }
-        });
-      }
-      if(bool == false) {
-        return;
-      }
-      i++;
-    }
-  }
+  $(".s9imageItem").remove();
 
-  loadImage();
+  // function loadImage() {
+  //   while(true) {
+  //     bool = false;
+  //     for(x = 0; x < imgTypeArray.length; x++) {
+  //       var imageUrl = 'photos/main/' + i + "" + imgTypeArray[x];
+  //       console.log('photos/main/' + i + "" + imgTypeArray[x]);
+  //       imageExists(imageUrl, function(exists) {
+  //         if(exists == true) {
+  //           img = new Image();
+  //           img.src = imageUrl;
+  //           imgArray.push(img);
+  //           bool = true;
+  //           console.log(imgArray);
+  //         } else {
+  //           missingCount++;
+  //         }
+  //       });
+  //     }
+  //     if(bool == false) {
+  //       return;
+  //     }
+  //     i++;
+  //   }
+  // }
 
   // function loadImage(i) {
   //   if (bFinishCheck) {
@@ -58,36 +48,38 @@ $(function() {
   //   }
   //   if (bCheckEnabled) {
   //     missingCount = 0;
-  //     $.each(imgTypeArray, function(index, type) {
-  //       img = new Image();
-  //       img.onload = fExists();
-  //       img.onerror = fDoesntExist();
-  //       console.log("searching "+i+type);
-  //       img.src = 'photos/main/' + i + "" + type;
-  //     });
+  //     img = new Image();
+  //     img.onload = fExists();
+  //     img.onerror = fDoesntExist();
+  //     img.src = 'photos/main/' + i + "" + ".JPG";
   //     loadImage(i+1);
   //   }
   // }
   // function fExists() {
   //   imgArray.push(img);
-  //   bFinishCheck = true;
+  //   bCheckEnabled = true;
   // }
   // function fDoesntExist() {
-  //   missingCount++;
-  //   console.log(missingCount);
-  //   if(missingCount >= imgTypeArray.length) {
-  //     bFinishCheck = true;
-  //     console.log(imgArray);
-  //   }
+  //   bFinishCheck = true;
   // }
+  // loadImage(0);
 
-  function buildImages() {
-    $(".s9imageItem").remove();
-    $.each(imgArray, function(index, image) {
-      $(".s9itemsContainer").prepend(
-        image_code_prefix+image.src+image_code_postfix
-      );
-    });
+  var folder = "photos/main/";
+  $.ajax({
+    url : folder,
+    success: function (data) {
+      $(data).find("a").attr("href", function (i, val) {
+        if(val.match(/\.(jpe?g|png|gif)$/)) {
+          buildImage(folder+val);
+        }
+      });
+    }
+  });
+
+  function buildImage(url) {
+    $(".s9itemsContainer").prepend(
+      image_code_prefix+url+image_code_postfix
+    );
   }
 
   $(".s9buttonNext").click(function() {
@@ -139,18 +131,18 @@ $(function() {
         'message': {
           'from_email': 'YOUR@EMAIL.HERE',
           'to': [
-              {
-                'email': 'RECIPIENT@EMAIL.HERE',
-                'name': 'RECIPIENT NAME (OPTIONAL)',
-                'type': 'to'
-              }
-            ],
+          {
+            'email': 'RECIPIENT@EMAIL.HERE',
+            'name': 'RECIPIENT NAME (OPTIONAL)',
+            'type': 'to'
+          }
+          ],
           'autotext': 'true',
           'subject': 'YOUR SUBJECT HERE!',
           'html': 'YOUR EMAIL CONTENT HERE! YOU CAN USE HTML!'
         }
       }
-     }).done(function(response) {
+    }).done(function(response) {
        console.log(response); // if you're into that sorta thing
      });
   }
