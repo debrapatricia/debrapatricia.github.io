@@ -4,77 +4,36 @@ $(function() {
   var image_code_postfix = '" style="width: 980px; height: 551px; object-fit: cover;" ></div><a draggable="false" style="cursor:pointer;height:100%;display:block;width:100%;position:absolute;top:0px;left:0px;background-color:#ffffff;filter:alpha(opacity=0);opacity:0;user-select:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-drag:none;-webkit-user-drag:none;-moz-user-drag:none;-ms-user-drag:none;user-modify:read-only;-webkit-user-modify:read-only;-moz-user-modify:read-only;-ms-user-modify:read-only;" data-page-item-context="galleryId:comp-ixp2s56a" data-gallery-id="comp-ixp2s56a"></a></div></div><div id="comp-ixp2s56adataItem-ixp2tqal1panel" class="s9imageItem_pnl s9imageItempanel" ><h3 style="text-align:left;" id="comp-ixp2s56adataItem-ixp2tqal1title" class="s9imageItemtitle" ></h3><p style="text-align:left;" id="comp-ixp2s56adataItem-ixp2tqal1description" class="s9imageItemdescription" ></p><a style="display:none;" id="comp-ixp2s56adataItem-ixp2tqal1link" class="s9imageItemlink" ></a></div></div>';
   var image_url_prefix = 'photos/main/';
 
+  $(".s9imageItem").remove();
   var bCheckEnabled = true;
   var bFinishCheck = false;
 
   var img;
   var imgArray = new Array();
-  var imgTypeArray = [".jpg", ".JPG", ".png", ".jpeg"];
-  var missingCount = 0;
   var i = 0;
-  var bool = false;
 
-  $(".s9imageItem").remove();
-
-  // function loadImage() {
-  //   while(true) {
-  //     bool = false;
-  //     for(x = 0; x < imgTypeArray.length; x++) {
-  //       var imageUrl = 'photos/main/' + i + "" + imgTypeArray[x];
-  //       console.log('photos/main/' + i + "" + imgTypeArray[x]);
-  //       imageExists(imageUrl, function(exists) {
-  //         if(exists == true) {
-  //           img = new Image();
-  //           img.src = imageUrl;
-  //           imgArray.push(img);
-  //           bool = true;
-  //           console.log(imgArray);
-  //         } else {
-  //           missingCount++;
-  //         }
-  //       });
-  //     }
-  //     if(bool == false) {
-  //       return;
-  //     }
-  //     i++;
-  //   }
-  // }
-
-  // function loadImage(i) {
-  //   if (bFinishCheck) {
-  //     buildImages();
-  //     return;
-  //   }
-  //   if (bCheckEnabled) {
-  //     missingCount = 0;
-  //     img = new Image();
-  //     img.onload = fExists();
-  //     img.onerror = fDoesntExist();
-  //     img.src = 'photos/main/' + i + "" + ".JPG";
-  //     loadImage(i+1);
-  //   }
-  // }
-  // function fExists() {
-  //   imgArray.push(img);
-  //   bCheckEnabled = true;
-  // }
-  // function fDoesntExist() {
-  //   bFinishCheck = true;
-  // }
-  // loadImage(0);
-
-  var folder = "https://github.com/debrapatricia/debrapatricia.github.io/tree/master/photos/main";
-  $.ajax({
-    url : folder,
-    success: function (data) {
-      $(data).find("a").attr("href", function (i, val) {
-        // if(val.match(/\.(jpe?g|png|gif)$/)) {
-        buildImage(folder+val);
-        // }
-      });
+  var myInterval = setInterval(loadImage, 1);
+  function loadImage() {
+    if (bFinishCheck) {
+      clearInterval(myInterval);
+      return;
     }
-  });
+    if (bCheckEnabled) {
+      bCheckEnabled = false;
+      img = new Image();
+      img.onload = fExists;
+      img.onerror = fDoesntExist;
+      img.src = 'photos/main/' + i + '.JPG';
+    }
+  }
+  function fExists() {
+    buildImage(img.src);
+    i++;
+    bCheckEnabled = true;
+  }
+  function fDoesntExist() {
+    bFinishCheck = true;
+  }
 
   function buildImage(url) {
     $(".s9itemsContainer").prepend(
