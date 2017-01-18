@@ -100,6 +100,24 @@ $(function() {
     clearInterval(autoplay);
   });
 
+  $("#about_me_button").click(function() {
+    $("#mainpage").fadeOut();
+    $("#contact").fadeOut();
+    $("#about_me").fadeIn();
+  });
+
+  $("#mainpage_button").click(function() {
+    $("#about_me").fadeOut();
+    $("#contact").fadeOut();
+    $("#mainpage").fadeIn();
+  });
+
+  $("#contact_button").click(function() {
+    $("#about_me").fadeOut();
+    $("#mainpage").fadeOut();
+    $("#contact").fadeIn();
+  });
+
   function nextImage() {
     var image_code = $(".s9imageItem:last-child")[0].outerHTML;
     $(".s9itemsContainer").prepend(image_code);
@@ -110,6 +128,31 @@ $(function() {
     var image_code = $(".s9imageItem:first-child")[0].outerHTML;
     $(".s9itemsContainer").append(image_code);
     $(".s9imageItem:first-child").remove();
+  }
+
+  function sendMail() {
+    $.ajax({
+      type: 'POST',
+      url: 'https://mandrillapp.com/api/1.0/messages/send.json',
+      data: {
+        'key': 'YOUR API KEY HERE',
+        'message': {
+          'from_email': 'YOUR@EMAIL.HERE',
+          'to': [
+              {
+                'email': 'RECIPIENT@EMAIL.HERE',
+                'name': 'RECIPIENT NAME (OPTIONAL)',
+                'type': 'to'
+              }
+            ],
+          'autotext': 'true',
+          'subject': 'YOUR SUBJECT HERE!',
+          'html': 'YOUR EMAIL CONTENT HERE! YOU CAN USE HTML!'
+        }
+      }
+     }).done(function(response) {
+       console.log(response); // if you're into that sorta thing
+     });
   }
 
   var autoplay = setInterval(nextImage, 3000);
