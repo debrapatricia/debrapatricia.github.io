@@ -67,20 +67,26 @@ $(function() {
   });
 
   $("#about_me_button").click(function() {
+    $("#mainPage").fadeIn();
     $("#mainpage").fadeOut();
     $("#contact").fadeOut();
+    $("#urban").fadeOut();
     $("#about_me").fadeIn();
   });
 
   $("#mainpage_button").click(function() {
+    $("#mainPage").fadeIn();
     $("#about_me").fadeOut();
     $("#contact").fadeOut();
+    $("#urban").fadeOut();
     $("#mainpage").fadeIn();
   });
 
   $("#contact_button").click(function() {
+    $("#mainPage").fadeIn();
     $("#about_me").fadeOut();
     $("#mainpage").fadeOut();
+    $("#urban").fadeOut();
     $("#contact").fadeIn();
   });
 
@@ -100,6 +106,14 @@ $(function() {
     $("#dropdown2").fadeIn();
   }, function() {
     $("#dropdown2").fadeOut();
+  });
+
+  $("#urban_button").click(function() {
+    $("#mainPage").fadeOut();
+    $("#about_me").fadeOut();
+    $("#mainpage").fadeOut();
+    $("#contact").fadeOut();
+    $("#urban").fadeIn();
   });
 
   window.addEventListener("resize", function() {
@@ -167,5 +181,27 @@ $(function() {
   });
 
   var autoplay = setInterval(nextImage, 3000);
+
+  var pswpElement = document.querySelectorAll('.demo-gallery')[0];
+  // build items array
+  var items = [
+      {
+          src: 'photos/main/0.JPG',
+          w: 600,
+          h: 400
+      },
+      {
+          src: 'photos/main/1.JPG',
+          w: 1200,
+          h: 900
+      }
+  ];
+  // define options (if needed)
+  var options = {
+      index: 0 // start at first slide
+  };
+  // Initializes and opens PhotoSwipe
+  var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+  gallery.init();
 
 });
