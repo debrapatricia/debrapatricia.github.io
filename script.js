@@ -125,19 +125,23 @@ $(function() {
   function updateImageSize() {
     var $div = $(".s10mediaZoomdialogBox");
     var $img = $div.find("img");
+    var gap;
+    if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+      gap = 200;
+    } else {
+      gap = 100;
+    }
     if(jQuery(this).height() < jQuery(this).width()) {
       // landscape
-      console.log("landscape");
-      $div.css({"width": jQuery(this).width()-200});
-      $div.css({"height": jQuery(this).height()-200});
+      $div.css({"width": jQuery(this).width()-gap});
+      $div.css({"height": jQuery(this).height()-gap});
       $img.css({"width": $div.width()});
       $img.css({"height": $div.height()});
       $img.parent().css({"width": "100%"});
     } else {
       // portrait
-      console.log("portrait");
-      $div.css({"width": jQuery(this).width()-200});
-      $div.css({"height": jQuery(this).height()-200});
+      $div.css({"width": jQuery(this).width()-gap});
+      $div.css({"height": jQuery(this).height()-gap});
       $img.css({"width": $div.width()});
       $img.css({"height": $div.height()});
       $img.parent().css({"width": "100%"});
