@@ -12,3 +12,13 @@ OKE DEB cara lu masukin images ke halaman depan:
 4. habis di upload lu harus tulis commit message... lu bilangnya "add/modify pictures" aja
 5. pencet commit
 6. check websitenya lagi... harusnya udh ke update
+
+Cara masukin images lewat git:
+
+1. Open Terminal
+2. add photos make sure 0,1,2,3,4,... .JPG
+3. ``git add -A``
+4. ``git commit -m "message"``
+5. ``git push origin master``
+
+kalo ada error di step 5, do ``git pull`` and then do step 5 again
